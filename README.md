@@ -9,7 +9,7 @@
 # 기타
 <details>
 <summary>기술 스택</summary>
-<div markdown="1">
+<div markdown="3">
 
 ![image](https://github.com/user-attachments/assets/2542ab96-439e-43f8-ac2d-70ddd63b76bb)
 
