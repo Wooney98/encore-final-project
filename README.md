@@ -28,7 +28,8 @@
 <summary>ERD</summary>
 <div markdown="">
 
-![image](https://github.com/user-attachments/assets/84f6de49-3455-47f7-9289-5c522fb5d06c)
+![image](https://github.com/user-attachments/assets/45ac0654-ed44-4951-8b2a-48fbfd7487aa)
+
 
 </div>
 </details>
