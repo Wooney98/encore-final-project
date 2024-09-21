@@ -1,0 +1,28 @@
+{% load static %}
+{% include 'base.html' %}
+{% block content %}
+<style>
+    /*
+    body{
+        height: 100vh;
+        background: "{%static 'css/images/layout/login.png'%}" no-repeat center;
+        overflow-y: ;
+    }
+    */
+</style>
+<body background="{%static 'css/images/layout/login4.png'%}"  style="overflow-y: hidden;  background-size: cover; background-repeat: no-repeat; background-position: top;">
+    <!-- Background Video-->
+
+        <div class="masthead  mt-3" style="text-align: center; margin: 0 auto;" >
+            <div>
+                <h1 style="color: gray;">회원탈퇴가 완료되었습니다</h1>
+                <h2 style="color: white;"><a href="{% url 'login'%}">Log in again</a></h2> <!--로그인 페이지로 돌아감-->
+            </div>
+        </div>
+
+    
+</body>
+{% endblock content %}
+{% block script %}
+    
+{% endblock script %}        

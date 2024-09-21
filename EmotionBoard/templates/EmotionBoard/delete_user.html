@@ -1,0 +1,32 @@
+{% load static %}
+{% include 'base.html' %}
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!-- Background Video-->
+    <body background="{%static 'css/images/layout/login1.png'%}"  style="overflow-y: hidden; overflow-x: hidden;  background-size: cover; background-repeat: no-repeat; background-attachment: fixed;">
+
+    <div class="row mt-5">
+        
+    </div>  
+    <div class="row mt-5">
+        <div class="col-2 mt-5">
+            
+        </div>
+        <div class="col-7 mt-5 ml-5">
+    
+            <div class="alert alert-light mt-5">
+                <h3>
+                    <p class="font-weight-bold" style="text-align: center; margin: 0; color: black;">회원탈퇴가 완료되었습니다.</p>
+                </h3>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+    
+{% endblock content %}
+{% block script %}
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+
+{% endblock script %}        

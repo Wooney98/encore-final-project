@@ -1,0 +1,316 @@
+{%extends 'EmotionBoard/board_base.html' %}
+{%load static%}
+{%block title%}
+<title>Main Page</title>
+{%endblock title%}
+{%block content%}
+
+<body background="{%static 'css/images/layout/home10.png'%}"
+    style="overflow-x: hidden;  background-size: cover; background-repeat: no-repeat; image-rendering: crisp-edges; transform: translateZ(-); backface-visibility: hidden; height: 100%; width: 95%; text-align: center; margin: 0 auto; margin-right: 50px;">
+
+    <div class="row">
+        <div class="col-1 mt-5">
+            <div class="mt-5">
+                <button id = "Home" class="mt-3" style="font-size: 15px; width: 150px; opacity:0;" onclick="Home()">Home</button>
+            </div>
+            <div class="mt-4">
+                <button class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="Write_diary()">Home</button>
+            </div>
+            <div class="mt-4">
+                <button id = "Home" class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="Diary_List()">Home</button>
+            </div>
+            <div class="mt-4">
+                <button class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="MyPage()">Home</button>
+            </div>
+            <div class="mt-4">
+                <button class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="EmotionChart()">Home</button>
+            </div>
+        </div>
+        <div class="col-5 mt-5" style="padding-left: 40px; padding-right: 10px;">
+            <div class="mt-5">
+                <h1>{{write_date}}</h1>
+                <hr style="height: 1px; background: black;">
+                <div class="main_wrap" style="margin-top: 30px;">
+                    <form name="write_diary_input" action="" method="POST" enctype="multipart/form-data">
+                        <div class="title_input clearfix" style="text-align: center; margin-top: 30px;">
+                            <label for="inp" class="inp">
+                                {%if diary_title%}
+                                <input type="title" name="title" id="inp" placeholder="&nbsp;" style="font-size: 25px;"
+                                    value="{{diary_title}}" readonly>
+                                {%else%}
+                                <input type="title" name="title" id="inp" placeholder="&nbsp;" style="font-size: 25px;">
+                                {%endif%}
+                                <span class="label" style="font-size: 20px;">일기 제목</span>
+                                <span class="border"></span>
+                            </label>
+
+
+                        </div>
+                        <div class="write_diary_image_input" id='image_input' style="margin: auto; margin-top: 30px;">
+                            {%if diary_img%}
+                            <img src="{{diary_img.url}}"
+                                style="width:98%; height:94%; image-rendering: -webkit-optimize-contrast;">
+                            {%else%}
+
+                            {%endif%}
+                        </div>
+                        <div style="text-align: center; margin-top: 40px;">
+                            {% csrf_token %}
+
+                            <textarea placeholder="일기 내용" id="text" name="content"
+                                style="height: 200px; width: 80%; overflow: visible; margin-bottom: 20px;"
+                                onkeydown="resize(this)" readonly>{{diary_content}}
+                                </textarea>
+                        </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- 해당 div 태그의 사이즈를 조절할 때 margin 0 auto 로 하고 width는 퍼센트. height는 padding-bottom %로 하면
+            해당 %를 가진 div 박스가 완성된다 -->
+        <div class="mt-5" style="height: 10%; width: 40%; margin: 0 auto; padding-right: 30px;">
+            <div class="mt-5">
+                <h1>오늘의 감정</h1>
+                <hr style="height: 1px; background: black;">
+                <div style="overflow-y: hidden; height: 700px;">
+                    <div style="text-align: center;">
+                    </div>
+                    <div class="col-8" style="margin: 0 auto;">
+                        <h1>감정 분석 차트</h1>
+                        <div>
+                            <!-- Card Body -->
+                            <div>
+                                <input type="text" name="percent" id="percent" value="{{percent}}" style="display: none;">
+                                <div class='pt-2 pl-4 pr-4 pb-3'>
+                                    <canvas id="myChart" name="percent"></canvas>
+                                </div>
+                                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                <script>
+                                    const ctx = document.getElementById('myChart');
+                                    new Chart(ctx, {
+                                        type: 'doughnut',
+                                        data: {
+                                            labels: [
+                                                {% for name in data %}
+                                                        '{{ name }}',
+                                                        {% endfor %}
+                                                    ],
+                                        datasets: [{
+                                            label: '# of Emotions',
+                                            //data: [49, 15, 11, 8, 7, 6, 3, 1],
+                                            data: [
+                                                {% for score in percent %}
+                                                            '{{ score }}',
+                                        {% endfor %}
+                                    ],
+                                        backgroundColor: [
+                                        'rgba(255, 0, 0)',
+                                        'rgba(255, 20, 147, 1)',
+                                        'rgba(0, 191, 255, 1)',
+                                        'rgba(138, 43, 226, 1)',
+                                        'rgba(0, 128, 0, 1)',
+                                        'rgba(0, 255, 0, 1)',
+                                        'rgba(255, 165, 0, 1)',
+                                        'rgba(255, 255, 0, 1)'
+                                    ],
+                                        borderColor: [
+                                        '#22252B',
+                                        '#22252B',
+                                        '#22252B',
+                                        '#22252B',
+                                        '#22252B',
+                                        '#22252B',
+                                        '#22252B',
+                                        '#22252B',
+                                    ],
+                                        borderWidth: 1,
+                                        hoverOffset: 8
+                                                    }]
+                                                },
+                                                options: {
+                                                    responsive: true,
+                                                    maintainAspectRatio: false, //true 하게 되면 캔버스 width,height에 따라 리사이징된다.
+                                                    legend: {
+                                                        position: 'right',
+                                                        fontColor: 'black',
+                                                        align: 'center',
+                                                        display: true,
+                                                        fullWidth: true,
+                                                        labels: {
+                                                            fontColor: 'rgb(0, 0, 0)'
+                                                        }
+                                                    },
+                                                    plugins: {
+                                                        labels: {//두번째 script태그를 설정하면 각 항목에다가 원하는 데이터 라벨링을 할 수 있다.
+                                                            fontColor: 'black',
+                                                            fontSize: 15,
+                                                            precision: 8
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <input type="text" name="main_emotion" id="main_emotion" value="{{main_emotion}}" style="visibility: hidden;">
+                        <h2 >오늘은 "{{main_emotion_kor}}" 감정을 느끼시군요!</h2>
+                        <h2>혹은 아닌가요? 그러면 현재 감정을 선택해주세요!</h2>
+                        <button type="button" class="btn" data-toggle="modal" data-target="#exampleModal"
+                            style="margin-bottom: 10px; font-size: 25px; color: black; border: 1px solid black;">감정
+                            선택하기</button>
+                        <p style="font-size: 30px;" id="emotion_select" name="emotion_select"></p>
+                    </div>
+                    <input type="submit" name="final_save" value="일기 저장" style="font-size: 30px;">
+                    <!-- <button type="button" class="btn" style="margin-bottom: 20px; font-size: 25px; color: black; border: 1px solid black;">저장하기</button> -->
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="static">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title" id="exampleModalLabel" style="color: black;">일기 저장</h1>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <h1 style="color: black;">감정 수정</h1>
+                                    <p style="font-size: 25px; color: black">감정 분석 결과가 마음에 안 드셨나요?
+                                        <br>
+                                        새로운 감정을 선택해주세요
+                                    </p>
+                                    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                                        name="sort-category" aria-label="Default select example" id="category">
+                                        <option selected value="0">감정을 선택해주세요</option>
+                                        <option value="1">화남</option>
+                                        <option value="2">두려움</option>
+                                        <option value="3">슬픔</option>
+                                        <option value="4">혐오</option>
+                                        <option value="5">놀람</option>
+                                        <option value="6">기대</option>
+                                        <option value="7">기쁨</option>
+                                        <option value="8">평온</option>
+                                    </select>
+                                    <h3>피드백(선택사항)
+                                        <br>
+                                        피드백을 보내주시면 성능 개선에 도움이 됩니다.
+                                        <br>
+                                    </h3>
+                                    <input type="text" name="feedback" id="feedback" size="50"
+                                        style="border: 1px solid black; border-radius: 3px; font-size: 20px;">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" data-dismiss="modal" class="btn btn-primary modal_ok"
+                                        value="확인" name="diary_temp" style="margin-bottom: 20px;">확인</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</body>
+<!-- Bootstrap core JavaScript-->
+<script src="{%static 'vendor/jquery/jquery.min.js'%}"></script>
+<script src="{%static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{%static 'vendor/jquery-easing/jquery.easing.min.js'%}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{%static 'js/sb-admin-2.min.js'%}"></script>
+
+<!-- Page level plugins -->
+<script src="{%static 'vendor/chart.js/Chart.min.js'%}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{%static 'js/demo/chart-area-demo.js'%}"></script>
+<script src="{%static 'js/demo/chart-pie-demo.js'%}"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+{%endblock content%}
+{%block script%}
+<script>
+    $("select[name=sort-category]").change(function () {
+        console.log($(this).val()); //value값 가져오기
+        console.log($("select[name=sort-category] option:selected").text()); //text값 가져오기
+        document.getElementById("emotion_select").innerHTML = "선택한 감정은: " + $("select[name=sort-category] option:selected").text()
+    });
+
+    function Home(){
+        if (confirm('Home으로 이동하면 작성한 일기가 사라집니다. 정말 나갈건가요?') == true){
+            location.href = "{%url 'EmotionBoard:board_main'%}"
+        } 
+        else{
+
+        }
+    }
+    function Write_diary(){
+        if (confirm('Home으로 이동하면 일기가 저장이 안돼요. 정말 나갈건가요?') == true){
+            location.href = "{%url 'EmotionBoard:post_diary'%}"
+        } 
+        else{
+
+        }
+    }
+
+    function MyPage(){
+        if (confirm('My Page로 이동하면 일기가 저장이 안돼요. 정말 나갈건가요?') == true){
+            location.href = "{%url 'Account:mypage'%}"
+        } 
+        else{
+
+        }
+    }
+
+
+    function Diary_List(){
+        if (confirm('Diary List로 이동하면 일기가 저장이 안돼요. 정말 나갈건가요?') == true){
+            location.href = "{%url 'EmotionBoard:diary_list'%}"
+        } 
+        else{
+
+        }
+        
+    }
+
+    function EmotionChart(){
+        if (confirm('Emotion Chart로 이동하면 일기가 저장이 안돼요. 정말 나갈건가요?') == true){
+            location.href = "{%url 'EmotionBoard:statics'%}"
+        } 
+        else{
+
+        }
+        
+    }
+
+
+</script>
+<script>
+    date = new Date();
+    year = date.getFullYear();
+    month = date.getMonth() + 1;
+    day = date.getDate();
+    //document.getElementById("current_date").innerHTML = year + "년 " + month + "월 " + day + "일";
+
+    //뒤로가기로 왔다면 메인 페이지로 보내버리는 코드. 일기 재작성 방지
+    window.onpageshow = function (event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+            //response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+            //response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+            // Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우
+            location.href = "/board/"; //메인 페이지로 넘김
+            console.log("뒤로가기로 옴")
+        }
+
+    }
+</script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/event_style.css' %}">
+{%endblock script%}

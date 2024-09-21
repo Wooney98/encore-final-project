@@ -1,0 +1,258 @@
+{%extends 'EmotionBoard/board_base.html' %}
+{%load static%}
+{%block title%}
+<title>Main Page</title>
+{%endblock title%}
+{%block content%}
+
+<body background="{%static 'css/images/layout/home10.png'%}"
+    style="overflow-x: hidden;  background-size: cover; background-repeat: no-repeat; image-rendering: crisp-edges; transform: translateZ(-); backface-visibility: hidden; height: 100%; width: 95%; text-align: center; margin: 0 auto; margin-right: 50px;">
+
+    <div class="row">
+        <div class="col-1 mt-5">
+            <div class="mt-5">
+                <button id = "Home" class="mt-3" style="font-size: 15px; width: 150px; opacity:0;" onclick="Home()">Home</button>
+            </div>
+            <div class="mt-4">
+                <button class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="Write_diary()">Home</button>
+            </div>
+            <div class="mt-4">
+                <button id = "Home" class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="Diary_List()">Home</button>
+            </div>
+            <div class="mt-4">
+                <button class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="MyPage()">Home</button>
+            </div>
+            <div class="mt-4">
+                <button class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="EmotionChart()">Home</button>
+            </div>
+        </div>
+        <div class="col-5 mt-5" style="padding-left: 40px; padding-right: 10px;">
+            <div class="mt-5">
+                <form name="write_diary_input" action="" method="POST"  enctype="multipart/form-data" id = "input">
+                <input type="text" name="main_emotion" id="main_emotion" value="{{user_select_emotion}}" style="display: none;">
+                <br><br><br><br>
+                <h2>오늘은 {{user_select_emotion}} 감정을 느끼시군요!</h2>
+                <br>
+                <img src="{{emotion_image}}" style="width: 300px; height: 300px;">
+            </div>
+        </div>
+        <!-- 해당 div 태그의 사이즈를 조절할 때 margin 0 auto 로 하고 width는 퍼센트. height는 padding-bottom %로 하면
+            해당 %를 가진 div 박스가 완성된다 -->
+            <div class="mt-5" style="height: 10%; width: 40%; margin: 0 auto; padding-right: 30px;">
+                <div class="mt-5" style="overflow-y: scroll; height: 700px;">
+                    {% csrf_token %}
+                    <body class="body">
+                        <div class="swiper-container swiper" style="padding-right: 20px; padding-left: 20px;">
+                            <div class="slide-content">
+                                <h4 class="mt-4 ml-2" style="position: absolute;">오늘은 이런 플레이리스트 어때요??</h4>
+                                <a onClick="window.location.reload()" class="mt-4"
+                                    style="cursor: pointer; position: absolute; right: 2%; z-index: 200;">
+                                    <img src="{%static 'css/images/layout/reload.png'%}" alt="">
+                                </a>
+                                <!-- <h4 class="mt-4" style="position: absolute; right: 1%;">새로고침</h4> -->
+                                <div class="card-wrapper swiper-wrapper">
+                                    {%for index in youtube_list%}
+                                    <div class="card swiper-slide">
+                                        <div class="image-content">
+                                            <span class="overlay"></span>
+
+                                            <div class="card-image">
+                                                <a href="{{index.link_url}}" target="_blank">
+                                                    <img class="card-img" src="{{index.thumnail}}" alt=""
+                                                        style="width: 100px; height: 100px;">
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-content">
+                                            <h4 class="name">{{index.title|truncatechars:30}}</h4>
+                                            <!-- <p class="description">으아아아아</p> -->
+
+                                        </div>
+                                    </div>
+                                    {%endfor%}
+                                </div>
+                            </div>
+                            <!-- <div class="swiper-button-next2" style="padding-left: 50px;"></div>
+                            <div class="swiper-button-prev2" style="padding-right: 50px;"></div> -->
+                        </div>
+                    </body>
+                    <div class="bsde" style="margin: 0; text-align: center; margin-top: 20px;">
+                        <div style="text-align: center; display: inline-block; width: 70%;">
+                            <div style="border: 1px solid #000; border-radius: 4px;">
+                                <div class="card-header1" style="background-color: rgb(228, 228, 228);">
+                                    <h4 class="m-0" style="color: black;">오늘의 추천 장르는
+                                        [
+                                        {%for genre in movie_genre_list%}
+                                        {%if forloop.last%}
+                                        {{genre}}
+                                        {%else%}
+                                        {{genre}},
+                                        {%endif%}
+                                        {%endfor%}
+                                        ]
+                                        입니다</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h5 style="margin-top: 10px;">보고 싶은 장르를 선택하세요(최대 3개)</h5>
+
+                        <div class="write_diary_image_input1" id='image_input' style="margin: auto; margin-top: 10px;">
+                            <div class="form-check" style="margin-top: 35px;">
+
+                                {%for genre in genre_list%}
+                                <input class="form-check-input" type="checkbox" name="selected"
+                                    id="check{{forloop.counter0}}" value="{{genre}}">
+                                <label class="form-check-label" for="check{{forloop.counter0}}"><span
+                                        style="font-size: 25px;">{{genre}}</span></label>
+                                {%if forloop.counter0 == 4%}
+                                <br>
+                                {%endif%}
+                                {%endfor%}
+
+                            </div>
+                        </div>
+                        {%if selected_list%}
+
+                        {%else%}
+                        <input type="submit" name="movie_drama_recommend" value="추천해주세요"
+                            style="width: 150px; height: 50px; margin-top: 30px; font-size: 20px;">
+                        {%endif%}
+                    </div>
+
+                    <body class="body">
+                        <div class="swiper-container swiper" style="padding-right: 20px; padding-left: 20px;">
+                            <div class="slide-content">
+                                <h4 class="mt-4 ml-2" style="position: absolute;">오늘은 이런 드라마/영화 어때요??</h4>
+                                <button type="submit" name = "reload_recommend_movie_drama" class="mt-4"
+                                    style="cursor: pointer; position: absolute; right: 2%; z-index: 200; background-color: white;">
+                                    <img src="{%static 'css/images/layout/reload.png'%}" alt="">
+                                </a>
+                                </button>
+                                <!-- <h4 class="mt-4" style="position: absolute; right: 1%;">새로고침</h4> -->
+                                <div class="card-wrapper swiper-wrapper">
+                                    {%if recomment_list%}
+                                    {%for recomment in recomment_list%}
+                                    {%for index in recomment%}
+                                    <div class="card swiper-slide">
+                                        <div class="image-content">
+                                            <span class="overlay"></span>
+
+                                            <div class="card-image">
+                                                <img class="card-img" src="{{index.thumnail}}" alt=""
+                                                    style="width: 100px; height: 100px;">
+                                            </div>
+                                        </div>
+
+                                        <div class="card-content">
+                                            <h4 class="name">{{index.title|truncatechars:30}}</h4>
+                                            <!-- <p class="description">으아아아아</p> -->
+
+                                        </div>
+                                    </div>
+                                    {%endfor%}
+                                    {%endfor%}
+                                    {%endif%}
+                                </div>
+                            </div>
+                            <!-- <div class="swiper-button-next2" style="padding-left: 50px;"></div>
+                            <div class="swiper-button-prev2" style="padding-right: 50px;"></div> -->
+                        </div>
+                    </body>
+                </form>
+            </div>
+            <button type="button" class="btn btn-outline-secondary" style="font-size: 25px; margin-top: 20px;" onclick="Home()">메인 화면으로</button>
+        </div>
+    </div>
+    </div>
+
+</body>
+<!-- Bootstrap core JavaScript-->
+<script src="{%static 'vendor/jquery/jquery.min.js'%}"></script>
+<script src="{%static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{%static 'vendor/jquery-easing/jquery.easing.min.js'%}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{%static 'js/sb-admin-2.min.js'%}"></script>
+
+<!-- Page level plugins -->
+<!-- <script src="{%static 'vendor/chart.js/Chart.min.js'%}"></script> -->
+
+<!-- Page level custom scripts -->
+<!-- <script src="{%static 'js/demo/chart-area-demo.js'%}"></script>
+<script src="{%static 'js/demo/chart-pie-demo.js'%}"></script> -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"> -->
+{%endblock content%}
+{%block script%}
+
+<script>
+
+    function Home(){
+        location.href = "{%url 'EmotionBoard:board_main'%}"
+    }
+    function Write_diary(){
+        location.href = "{%url 'EmotionBoard:post_diary'%}"
+    }
+
+    function Diary_List(){
+        location.href = "{%url 'EmotionBoard:diary_list'%}"
+    }
+
+    function MyPage(){
+        location.href = "{%url 'Account:mypage'%}"
+    }
+
+    function EmotionChart(){
+        location.href = "{%url 'EmotionBoard:statics'%}"
+    }
+
+    function reload_recommend_movie_drama(){
+        document.getElementById("input").submit();
+    }
+
+    $(document).ready(function(){
+        $("input[type='checkbox']").on("click",function(){
+            let count = $("input:checked[type='checkbox']").length;
+            console.log(count)
+            if (count>3){
+                //$(this).prop("checked",false);
+                this.checked=false;
+                alert("3개까지만 선택이 가능합니다.")
+            }
+        });
+    });
+
+
+    function doNotReload(){
+        if( (event.ctrlKey == true && (event.keyCode == 78 || event.keyCode == 82)) || (event.keyCode == 116) ) {
+            event.keyCode = 0;
+            event.cancelBubble = true;
+            event.returnValue = false;
+        } 
+    }
+    document.onkeydown = doNotReload;
+
+    var checkbox_list = document.querySelectorAll(".form-check-input")
+    console.log(checkbox_list)
+    {%if selected_list%}
+    for(let i=0; i<checkbox_list.length; i++){
+        //console.log(checkbox_list[i].value)
+        //console.log({{selected_list|safe}}.indexOf(checkbox_list[i].value))
+        if({{selected_list|safe}}.indexOf(checkbox_list[i].value)>-1){
+            checkbox_list[i].checked=true
+        }
+    }
+    {%endif%}
+</script>
+<script src="//code.jquery.com/jquery.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>  -->
+<!-- Swiper JS -->
+<script src="{%static 'js/swiper-bundle.min.js'%}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/event_style.css' %}">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/css/swiper.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+<script src="{%static 'js/scrits.js'%}"></script>
+{%endblock script%}

@@ -1,0 +1,29 @@
+.card{
+    /* min-width: 1000%; */
+    width: 100%;
+    /* padding: 0 0 0 10px; */
+    margin: 12px;
+    border: 1px solid white;
+
+}
+.card-header{
+    background-color: white;
+    font-size: 40px;
+}
+.calendar {
+    width: 100%;
+    font-size: 13px;
+    bottom: 100px;
+}
+.calendar th.sun {color: #f02f2f;}
+.calendar th.sat {color: #2208e7;}
+.calendar th {
+    height: 40px;
+    font-size: 20px;
+}
+.calendar td {
+    width: 100px;
+    height: 80px;
+    font-size: 20px;
+    vertical-align : top;
+}

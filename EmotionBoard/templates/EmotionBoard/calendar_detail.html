@@ -1,0 +1,145 @@
+{%extends 'EmotionBoard/board_base.html' %}
+{%load static%}
+{%block title%}
+<title>Main Page</title>
+{%endblock title%}
+{%block content%}
+    <body background="{%static 'css/images/layout/home10.png'%}"  style="overflow-x: hidden;  background-size: cover; background-repeat: no-repeat; image-rendering: crisp-edges; transform: translateZ(-); backface-visibility: hidden; height: 100%; width: 95%; text-align: center; margin: 0 auto; margin-right: 50px;" >
+        
+        <div class="row" >
+            <div class="col-1 mt-5">
+                <div class="mt-5">
+                    <button id = "Home" class="mt-3" style="font-size: 15px; width: 150px; opacity:0;" onclick="Home()">Home</button>
+                </div>
+                <div class="mt-4">
+                    <button class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="Write_diary()">Home</button>
+                </div>
+                <div class="mt-4">
+                    <button id = "Home" class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="Diary_List()">Home</button>
+                </div>
+                <div class="mt-4">
+                    <button class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="MyPage()">Home</button>
+                </div>
+                <div class="mt-4">
+                    <button class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="EmotionChart()">Home</button>
+                </div>
+            </div>
+            <div class="col-5 mt-5">
+                <div class="mt-2">
+                    {% include 'EmotionBoard/calendar.html' %}
+                </div>
+            </div>
+            <!-- 해당 div 태그의 사이즈를 조절할 때 margin 0 auto 로 하고 width는 퍼센트. height는 padding-bottom %로 하면
+            해당 %를 가진 div 박스가 완성된다 -->
+            <div class="mt-5" style="height: 10%; width: 40%; margin: 0 auto; padding-right: 30px; padding-top: 30px;" >
+                <div class="mt-2" >
+                    <button class="btn btn-outline-secondary" onclick="location.href = '{{ diary.get_details_url }}'" style="position: absolute; margin-left: 240px; font-size: 25px; color: black;">상세보기</button>
+                    <h1>{{ diary.write_date | date:'Y-m-d'}}</h1>
+                <hr style="height: 1px; background: black;">
+                <div style="overflow-y: scroll; height: 650px; padding-right: 20px;">
+                    <div class="main_wrap">
+                        <form name="write_diary_input" action="" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                                <div class="title_input clearfix" >
+                                    <label for="inp" class="inp">
+                                        <input type="title" name="title" id="inp" placeholder="&nbsp;" style="font-size: 15px; color: black;" value="{{diary.diary_title}}" readonly>
+                                        
+                                        <span class="label" style="font-size: 25px; text-align: center;">일기 제목</span>
+                                        
+                                        <span class="border"></span>
+                                      </label>
+                                      
+                
+                                    
+                                </div>
+                
+                                <!-- <div class="filebox">
+                                    <input class="upload-name" value="첨부파일" placeholder="첨부파일">
+                                    <label for="file">파일찾기</label> 
+                                    <input type="file" id="file">
+                                </div> -->
+                                <br>
+                                <div class="write_diary_image_input" id = 'image_input' style="margin: auto;" >
+                                    {% if  diary.diary_img %}
+                                    <img src="{{ diary.diary_img.url }}" style=" image-rendering: -webkit-optimize-contrast ;width:98%; height:94%;">
+                                    {% else %}
+                                    <img src="" style=" image-rendering: -webkit-optimize-contrast ;height: 100%;">
+                                    {% endif %}
+                                </div>
+                                <div style="margin-top: 10px;">
+                                    
+                                    
+                                    <textarea class = "autosize"  id="text" name="content" style="height: 240px; overflow: visible; width: 80%;"onkeydown="resize(this)" readonly>{{ diary.diary_content }}</textarea>
+                                    <br>
+                                    <br>
+                                    
+                            
+                            
+                        </form>
+                    </div>
+                    
+                    
+                    
+                </div>
+                
+            </div>
+            </div>
+        </div>
+        
+    </body>
+    <!-- Bootstrap core JavaScript-->
+    <script src="{%static 'vendor/jquery/jquery.min.js'%}"></script>
+    <script src="{%static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{%static 'vendor/jquery-easing/jquery.easing.min.js'%}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{%static 'js/sb-admin-2.min.js'%}"></script>
+
+    <!-- Page level plugins -->
+    <script src="{%static 'vendor/chart.js/Chart.min.js'%}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{%static 'js/demo/chart-area-demo.js'%}"></script>
+    <script src="{%static 'js/demo/chart-pie-demo.js'%}"></script>
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"> -->
+    
+    <!-- calendar -->
+    <link rel="stylesheet" href="{% static 'css/cal_styles.css' %}">
+{%endblock content%}
+{%block script%}
+<script>
+    function Home(){
+        location.href = "{%url 'EmotionBoard:board_main'%}"
+    }
+    function Diary_List(){
+        location.href = "{%url 'EmotionBoard:diary_list'%}"
+    }
+
+    function Write_diary(){
+        location.href = "{%url 'EmotionBoard:post_diary'%}"
+    }
+
+    function MyPage(){
+        location.href = "{%url 'Account:mypage'%}"
+    }
+
+    function EmotionChart(){
+        location.href = "{%url 'EmotionBoard:statics'%}"
+    }
+
+</script>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/event_style.css' %}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<!-- calendar -->
+<link rel="stylesheet" href="{% static 'css/cal_styles.css' %}">
+{%endblock script%}

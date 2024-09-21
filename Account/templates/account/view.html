@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ post.title }}
+{% endblock title %}
+
+{% block main_area %}
+<section class="container" style="margin-bottom: 20px; margin-top: 30px;">
+    <div class="row">
+        <div>
+            <article>
+
+                <header class="mb-3">
+                    <!-- Post title-->
+                    <h1 class="fw-bolder mb-2" style="margin-top: 50px;">{{ user.username }}의 개인 페이지</h1>
+                    회원 uid : {{user.uid}}
+                    <br>
+                    회원 email : {{user.email}}
+                </header>
+            </article>
+            <br>
+            <br>
+        </div>
+            <h2>작성한 글 내역</h2>
+            <main id="content" class="content" role="main" style="padding: 20px;">
+                <div class="wraps">
+                  <img src="" class="wrapshadow">
+                  <!-- 그리드 카드 -->
+                  <div class="grid">
+                    {% for post in write_post%}
+                    <div class="grid-item">
+                      <article class="post">
+                          <!-- <a href="article.html"><img src="{% static 'assets/img/paw.png' %}" style="width: 365px; height:225px;"></a> -->
+                          {%if post.post_category_id == 1%}
+                            {% if post.thumnail %}
+                              <div>
+                                <a href="{%url 'pet:post_deatil' post.id%}">
+                                  <img class="card-img-top" src="/media/{{post.thumnail}}" alt="{{ post.thumnail }} head image" style="width: 365px; height:225px;" />
+                                </a>
+                              </div>
+                            {% else %}
+                              <div>
+                                <a href="{%url 'pet:post_deatil' post.id%}">
+                                  <img class="img-fluid post-thumb " src="{%static 'assets\img\gallery\1111.jpg'%}" alt="image" style="width: 365px; height:225px;">
+                                </a>
+                              </div>
+                            {%endif%}
+                          {%elif post.post_category_id == 2%}
+                            {% if post.thumnail %}
+                              <div>
+                                <a href="{%url 'pet:recommend_detail' post.id%}">
+                                  <img class="card-img-top" src="/media/{{post.thumnail}}" alt="{{ post.thumnail }} head image" style="width: 365px; height:225px;" />
+                                </a>
+                              </div>
+                            {% else %}
+                              <div>
+                                <a href="{%url 'pet:recommend_detail' post.id%}">
+                                  <img class="img-fluid post-thumb " src="{%static 'assets\img\gallery\1111.jpg'%}" alt="image" style="width: 365px; height:225px;">
+                                </a>
+                              </div>
+                            {%endif%}
+                          {%else%}
+                            {% if post.thumnail %}
+                              <div>
+                                <a href="{%url 'pet:mybaby_detail' post.id%}">
+                                  <img class="card-img-top" src="/media/{{post.thumnail}}" alt="{{ post.thumnail }} head image" style="width: 365px; height:225px;" />
+                                </a>
+                              </div>
+                            {% else %}
+                              <div>
+                                <a href="{%url 'pet:mybaby_detail' post.id%}">
+                                  <img class="img-fluid post-thumb " src="{%static 'assets\img\gallery\1111.jpg'%}" alt="image" style="width: 365px; height:225px;">
+                                </a>
+                              </div>
+                            {%endif%}
+                          {%endif%}
+                          <div class="wrapgriditem">
+                            <header>
+                              {%if post.post_category_id == 1%}
+                              <h3><a href="{%url 'pet:post_deatil' post.id%}">{{post.title}}</a></h3>
+                              {%elif post.post_category_id == 2%}
+                              <h3><a href="{%url 'pet:recommend_detail' post.id%}">{{post.title}}</a></h3>
+                              {%else%}
+                              <h3><a href="{%url 'pet:mybaby_detail' post.id%}">{{post.title}}</a></h3>
+                              {%endif%}
+                            </header>
+                            <section class="post-excerpt">
+                              <p>
+                                {{post.content| striptags|  truncatechars:60}} <a class="read-more" href="#"></a>
+                              </p>
+                            </section>
+                              <footer class="post-meta2">
+                                <p href="author.html">{{post.author.username}}</p>
+                                {%if post.post_category_id == 1%}
+                                <img class="author-thumb" src="{% static 'assets/img/dog.png' %}" alt="David" nopin="nopin" />
+                                {%elif post.post_category_id == 2%}
+                                <img class="author-thumb" src="{% static 'assets/img/cat.png' %}" alt="David" nopin="nopin" />
+                                {%else%}
+                                <img class="author-thumb" src="{% static 'assets/img/leash-dog.png' %}" alt="David" nopin="nopin" />
+                                {%endif%}
+                                <p class="post-date">{{post.created_at}}</p>
+                              </footer>
+                          </div>
+                          </article>
+                      </div>
+                      {%endfor%}
+                  </div>
+                </div>
+              </main>
+        </div>
+    </div>
+</section>
+<div class="card card-body">
+    <a class="btn btn-primary" href="{% url 'Account:delete_success' %}">Delete User</a>
+</div>
+{%endblock main_area%}

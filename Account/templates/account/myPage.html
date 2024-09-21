@@ -1,0 +1,134 @@
+{%extends 'EmotionBoard/board_base.html' %}
+{%load static%}
+{%block title%}
+<title>Main Page</title>
+{%endblock title%}
+{%block content%}
+    <body background="{%static 'css/images/layout/home10.png'%}"  style="overflow-x: hidden;  background-size: cover; background-repeat: no-repeat; image-rendering: crisp-edges; transform: translateZ(-); backface-visibility: hidden; height: 100%; width: 95%; text-align: center; margin: 0 auto; margin-right: 50px;" >
+        
+        <div class="row" >
+            <div class="col-1 mt-5">
+                <div class="mt-5">
+                    <button id = "Home" class="mt-3" style="font-size: 15px; width: 150px; opacity:0;" onclick="Home()">Home</button>
+                </div>
+                <div class="mt-4">
+                    <button class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="Write_diary()">Home</button>
+                </div>
+                <div class="mt-4">
+                    <button id = "Home" class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="Diary_List()">Home</button>
+                </div>
+                <div class="mt-4">
+                    <button class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="MyPage()">Home</button>
+                </div>
+                <div class="mt-4">
+                    <button class="mt-4" style="font-size: 15px; width: 150px; opacity:0;" onclick="EmotionChart()">Home</button>
+                </div>
+            </div>
+            <div class="col-5 mt-5" style="width: 50%; padding-left: 40px;">
+                <div class="mt-5">
+                    <h1>MyPage</h1>
+                    <hr style="height: 1px; background: black;">
+                    <br>
+                    <br>
+                    <h2>email : {{user.email}}</h2>
+                    <h2>NickName : {{user.username}}</h2>
+                    <h2>BirthDay : {{user.birth_date}}</h2>
+                    <br><br><br><br><br><br><br><br><br><br>
+                    <button type="button" class="btn btn-light" style="width: 50%; font-size: 35px; border: 2px solid black; border-radius: 10px; margin-bottom: 20px;" onclick="PasswordChange()">비밀번호 변경</button>
+                    <button type="button" class="btn btn-light" style="width: 50%; font-size: 35px; border: 2px solid black; border-radius: 10px; margin-bottom: 20px;"" onclick="LogOut()">로그아웃</button>
+                    <button type="button" class="btn btn-danger" style="width: 50%; font-size: 35px; border: 2px solid black; border-radius: 10px;" onclick="deleteUser()">회원탈퇴</button>
+                </div>
+            </div>
+            <!-- 해당 div 태그의 사이즈를 조절할 때 margin 0 auto 로 하고 width는 퍼센트. height는 padding-bottom %로 하면
+            해당 %를 가진 div 박스가 완성된다 -->
+            <div class="mt-5" style="height: 10%; width: 40%; margin: 0 auto; padding-right: 30px; padding-top: 30px;" >
+                <div class="mt-3" >
+                    <h1 id = "current_date">만든이들</h1>
+                    <hr style="height: 1px; background: black;">
+                    <div style="height: 700px;">
+                        <br>
+                        <h1>노한진 - Team Leader </h1>
+                        <h2>프로젝트 기획-운영, UI설계 ,DB설계, Full_Stack</h2>
+                        <br>
+                        <h1>양승천</h1>
+                        <h2>Full_Stack</h2>
+                        <br>
+                        <h1>손성우</h1>
+                        <h2>프로젝트 문서화, 데이터 수집, Full_Stack</h2>
+                        <br>
+                        <h1>허모아</h1>
+                        <h2>데이터 분석, 데이터 전처리, Model Transplantation</h2>
+                        <br>
+                        <h1>한정훈</h1>
+                        <h2>데이터 분석, 데이터 수집, 데이터 전처리</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </body>
+    <!-- Bootstrap core JavaScript-->
+    <!-- <script src="{%static 'vendor/jquery/jquery.min.js'%}"></script>
+    <script src="{%static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script> -->
+
+    <!-- Core plugin JavaScript-->
+    <!-- <script src="{%static 'vendor/jquery-easing/jquery.easing.min.js'%}"></script> -->
+
+    <!-- Custom scripts for all pages-->
+    <!-- <script src="{%static 'js/sb-admin-2.min.js'%}"></script> -->
+
+    <!-- Page level plugins -->
+    <!-- <script src="{%static 'vendor/chart.js/Chart.min.js'%}"></script> -->
+
+    <!-- Page level custom scripts -->
+    <!-- <script src="{%static 'js/demo/chart-area-demo.js'%}"></script>
+    <script src="{%static 'js/demo/chart-pie-demo.js'%}"></script> -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/event_style.css' %}">
+{%endblock content%}
+{%block script%}
+<script>
+    function Home(){
+        location.href = "{%url 'EmotionBoard:board_main'%}"
+    }
+    function Diary_List(){
+        location.href = "{%url 'EmotionBoard:diary_list'%}"
+    }
+
+    function Write_diary(){
+        location.href = "{%url 'EmotionBoard:post_diary'%}"
+    }
+
+    function EmotionChart(){
+        location.href = "{%url 'EmotionBoard:statics'%}"
+    }
+
+    function MyPage(){
+        location.href = "{%url 'Account:mypage'%}"
+    }
+
+
+    function LogOut(){
+        if (confirm('로그아웃 하시겠습니까?') == true){
+            location.href = "/accounts/logout"
+        } 
+        else{
+            
+        }
+    }
+
+    function deleteUser(){
+        if (confirm('회원탈퇴를 하시겠습니까?') == true){
+            location.href = "{% url 'Account:delete_success' %}"
+        } 
+        else{
+            
+        }
+    }
+
+    function PasswordChange(){
+        location.href = "/account/password_change"
+    }
+</script>
+
+{%endblock script%}

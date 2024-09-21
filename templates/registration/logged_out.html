@@ -1,0 +1,25 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block my_style%}
+<link href="{%static 'css/my_style.css'%} " rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+{%endblock my_style%}
+{% block title %}로그아웃{% endblock title %}
+
+{% block content %}
+<section class="blog-list px-3 py-5 p-md-5">
+    <br>
+    <br>
+    <br>
+    <h2 style="text-align: center;">방문해 주셔서 감사합니다. 홈페이지 로그아웃이 되었습니다.</h2>
+    <br>
+    <br>
+    <p class="font-italic;" style="text-align: center;"><a href="{% url 'login'%}" class="btn col-sm-8"  style="background-color:#FAAB78; color: white; width: 300px;">Log in again</a></p> <!--로그인 페이지로 돌아감-->
+</section>
+
+{% endblock content %}
+{%block script%}
+<script>
+    location.href = document.referrer;
+</script>
+{%endblock script%}
