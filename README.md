@@ -9,20 +9,26 @@
 # 기타
 <details>
 <summary>기술 스택</summary>
-<div markdown="3">
+<div markdown="">
 
 ![image](https://github.com/user-attachments/assets/2542ab96-439e-43f8-ac2d-70ddd63b76bb)
 
 </div>
 </details>
 
+<details>
+<summary>시스템 흐름도</summary>
+<div markdown="">
 
-
-
-
-
-## 시스템 흐름도
 <img width="1412" alt="시스템흐름도" src="https://github.com/user-attachments/assets/81db5cf2-9ca9-40a9-9707-84e89e837383">
+</div>
+</details>
 
-## ERD
+<details>
+<summary>ERD</summary>
+<div markdown="">
+
 ![image](https://github.com/user-attachments/assets/84f6de49-3455-47f7-9289-5c522fb5d06c)
+
+</div>
+</details>
