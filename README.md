@@ -4,20 +4,21 @@
 # 프로젝트 소개
 - `python` 기반의 `Django` 프레임워크와 KoBERT 자연어 분석을 활용한 웹 풀스택 개발
 - 개발 구성원 : 5명
-- 개발 기간 : 23.01.03 ~ 23.01.30 
-
+- 개발 기간 : 23.01.03 ~ 23.01.30
+- 
+# 기타
 <details>
-<summary>토글 접기/펼치기</summary>
+<summary>기술 스택</summary>
 <div markdown="1">
 
-안녕
+![image](https://github.com/user-attachments/assets/2542ab96-439e-43f8-ac2d-70ddd63b76bb)
 
 </div>
 </details>
 
-# 기타
-## 기술 스택
-![image](https://github.com/user-attachments/assets/2542ab96-439e-43f8-ac2d-70ddd63b76bb)
+
+
+
 
 
 ## 시스템 흐름도
